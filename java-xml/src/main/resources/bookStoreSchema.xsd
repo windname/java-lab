@@ -2,7 +2,7 @@
 <schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.example.org/addressBook"
 	xmlns:tns="http://www.example.org/addressBook" elementFormDefault="qualified">
 
-    <element name="bookstore" type="tns:bookstoreType"/>
+    <tns:element name="bookstore" type="tns:bookstoreType"/>
 
 	<complexType name="bookstoreType">
 		<sequence>
