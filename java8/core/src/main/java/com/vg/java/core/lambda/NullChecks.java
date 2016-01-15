@@ -1,6 +1,7 @@
 package com.vg.java.core.lambda;
 
 import java.util.Optional;
+import java.util.stream.Stream;
 
 public class NullChecks {
 	public static void main(String[] str) {
@@ -9,13 +10,19 @@ public class NullChecks {
 
 	public NullChecks() {
 		Optional<String> str = getString();
-		str.ifPresent(System.out::println);
+		str.ifPresent(System.out::println); // just print hello string or do nothing if getString returns null
 
 		Optional<String> nullString = getNull();
 		nullString.ifPresent(System.out::println); // do nothing
 
-		String def = getEmpty().orElse("Default");
+		String def = getEmpty(null).orElse("Default");
 		System.out.println(def);
+		System.out.println(getEmpty("not empty").orElse("Default"));
+		// very simple Supplier
+		System.out.println(getEmpty(null).orElseGet(() -> {return "Default!";}));
+		// other option to make chain
+		Stream.of(getNull(), getEmpty(null), getString()).filter(Optional::isPresent).map(Optional::get).findFirst().ifPresent(System.out::println);;
+		
 
 		// filter result
 		getString().filter(s -> isLongString(s)).ifPresent(System.out::println); // nothing due to short string
@@ -35,6 +42,23 @@ public class NullChecks {
 			System.out.println("Nothing!");
 		}
 		
+		getMagazine(null, null).flatMap(Magazine::getA).ifPresent(a->print(a)); // do nothing
+		getMagazine("magaz", null).flatMap(Magazine::getA).ifPresent(a->print(a)); // do nothing
+		getMagazine("magaz", "art").flatMap(Magazine::getA).ifPresent(a->print(a)); // art
+//		getMagazine("magaz", "art").map(Magazine::getA).ifPresent(a->print(a)); type is not compatible
+		
+		Magazine magazine = null;
+		Optional<Article> a = Optional.ofNullable(magazine).flatMap(m -> Optional.ofNullable(m.getRawA()));
+		a.ifPresent(System.out::print);
+		a = Optional.ofNullable(new Magazine()).flatMap(m -> Optional.ofNullable(m.getRawA()));
+		a.ifPresent(System.out::print);
+		a = Optional.ofNullable(new Magazine(new Article("java8"))).flatMap(m -> Optional.ofNullable(m.getRawA()));
+		a.ifPresent(System.out::print);
+		
+		Buklet b = new Buklet();
+		if (b instanceof Magazine) {
+			System.out.println("Buklet is magazine!");
+		}
 
 	}
 
@@ -46,8 +70,9 @@ public class NullChecks {
 		return Optional.ofNullable(null);
 	}
 
-	public Optional<String> getEmpty() {
-		return Optional.empty();
+	public Optional<String> getEmpty(String s) {
+		if (s== null) return Optional.empty();
+		return Optional.of(s);
 	}
 
 	public Optional<String> getString() {
@@ -72,6 +97,18 @@ public class NullChecks {
 	public Optional<Article> getArticle(String name) {
 		return Optional.ofNullable(new Article(name));
 	}
+	
+	public Optional<Magazine> getMagazine(String magazineName, String articleName) {
+		if (magazineName == null) {
+			return Optional.empty();
+		}
+		Magazine m = new Magazine();
+		if (articleName != null) {
+			m.setA(new Article(articleName));
+		}		
+		return Optional.of(m);
+	}
+	
 
 	class Article {
 		private String name;
@@ -87,17 +124,39 @@ public class NullChecks {
 		public void setName(String name) {
 			this.name = name;
 		}
+
+		@Override
+		public String toString() {
+			return "Article [name=" + name + "]";
+		}
+		
 	}
 	
 	class Magazine {
-		private Article a;
+		
+		public Magazine(Article a) {
+			this.a = a;
+		}
+		
+		public Magazine() {			
+		}
 
-		public Article getA() {
+		private Article a;
+		
+		public Article getRawA() {
 			return a;
+		}
+
+		public Optional<Article> getA() {
+			return Optional.ofNullable(a);
 		}
 
 		public void setA(Article a) {
 			this.a = a;
 		}
+	}
+	
+	class Buklet extends Magazine {
+		
 	}
 }
