@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE note SYSTEM "note.dtd" >
-<note>
-  <to>to</to>
-  <from>from</from>
-  <heading>heading</heading>
-  <body>Hello world</body>
-</note>
