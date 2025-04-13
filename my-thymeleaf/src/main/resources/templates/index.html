@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Thymeleaf Demo</title>
+</head>
+<body>
+<!-- 1. Text Output -->
+<h1 th:text="${message}">Default Message</h1>  <!-- Replaces "Default Message" -->
+
+<!-- 2. Variables -->
+<p>User: <span th:text="${user.name}">Guest</span></p>
+
+<!-- 3. Conditionals -->
+<div th:if="${user.isAdmin}">
+    <p>Admin Dashboard</p>
+</div>
+
+<!-- 4. Loops -->
+<ul>
+    <li th:each="item : ${items}" th:text="${item}">Sample Item</li>
+</ul>
+
+<!-- 5. Links -->
+<div th:replace="~{fragments/header :: site-header}"></div>
+</body>
+</html>

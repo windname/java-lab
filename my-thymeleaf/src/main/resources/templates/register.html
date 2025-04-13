@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>User Registration</title>
+    <style>
+        .error { color: red; }
+        .error-field { border: 1px solid red; }
+    </style>
+</head>
+<body>
+<h1>User Registration</h1>
+
+<form th:action="@{/register}" th:object="${user}" method="post">
+    <!-- Username -->
+    <div th:classappend="${#fields.hasErrors('username')} ? 'error-field'">
+        <label>Username:</label>
+        <input type="text" th:field="*{username}" required>
+        <span th:if="${#fields.hasErrors('username')}"
+              th:errors="*{username}" class="error"></span>
+    </div>
+
+    <!-- Email -->
+    <div th:classappend="${#fields.hasErrors('email')} ? 'error-field'">
+        <label>Email:</label>
+        <input type="email" th:field="*{email}" required>
+        <span th:if="${#fields.hasErrors('email')}"
+              th:errors="*{email}" class="error"></span>
+    </div>
+
+    <!-- Password -->
+    <div th:classappend="${#fields.hasErrors('password')} ? 'error-field'">
+        <label>Password:</label>
+        <input type="password" th:field="*{password}" required>
+        <span th:if="${#fields.hasErrors('password')}"
+              th:errors="*{password}" class="error"></span>
+    </div>
+
+    <!-- Country Select -->
+    <div th:classappend="${#fields.hasErrors('country')} ? 'error-field'">
+        <label>Country:</label>
+        <select th:field="*{country}" required>
+            <option value="">-- Select Country --</option>
+            <option th:each="country : ${countries}"
+                    th:value="${country.code}"
+                    th:text="${country.name}"></option>
+        </select>
+        <span th:if="${#fields.hasErrors('country')}"
+              th:errors="*{country}" class="error"></span>
+    </div>
+
+    <!-- Gender Radio -->
+    <div>
+        <label>Gender:</label>
+        <div th:each="gender : ${genders}">
+            <input type="radio" th:field="*{gender}"
+                   th:value="${gender.key}"
+                   th:id="${'gender_' + gender.key}">
+            <label th:for="${'gender_' + gender.key}"
+                   th:text="${gender.value}"></label>
+        </div>
+    </div>
+
+    <!-- Newsletter -->
+    <div>
+        <input type="checkbox" th:field="*{newsletter}" id="newsletter">
+        <label for="newsletter">Subscribe to newsletter</label>
+    </div>
+
+    <!-- Submit -->
+    <button type="submit">Register</button>
+</form>
+</body>
+</html>

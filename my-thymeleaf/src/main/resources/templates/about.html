@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>About Us</title>
+    <!-- Reuse your existing fragments -->
+    <link th:href="@{/css/styles.css}" rel="stylesheet">
+</head>
+<body>
+
+<main class="about-content">
+    <h1>About Our Company</h1>
+    <p>Founded in <span th:text="${currentYear - 10}"></span>, we've been serving customers for 10 years!</p>
+
+    <!-- Example of dynamic content -->
+    <div th:if="${#authentication?.isAuthenticated()}">
+        <p>Welcome back, <span th:text="${#authentication.name}"></span>!</p>
+    </div>
+</main>
+
+</body>
+</html>

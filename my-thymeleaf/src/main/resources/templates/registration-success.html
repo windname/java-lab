@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Registration Successful</title>
+</head>
+<body>
+<h1>Registration Successful!</h1>
+<p>Thank you for registering, <span th:text="${user.username}"></span>!</p>
+<p>We've sent a confirmation email to <span th:text="${user.email}"></span>.</p>
+<a th:href="@{/}">Return to homepage</a>
+</body>
+</html>
